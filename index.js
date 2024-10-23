@@ -12,15 +12,15 @@ let cart = [
   { productId: 2, name: 'Mobile', price: 20000, quantity: 2 },
 ];
 
-function addItemsToCart(cartCopy, productId, name, price, quantity) {
-  cartCopy.push({
+function addItemsToCart(cart, productId, name, price, quantity) {
+  cart.push({
     productId: productId,
     name: name,
     price: price,
     quantity: quantity,
   });
 
-  return cartCopy;
+  return cart;
 }
 
 // endpoint 1
@@ -29,29 +29,28 @@ app.get('/cart/add', (req, res) => {
   let name = req.query.name;
   let price = parseFloat(req.query.price);
   let quantity = parseInt(req.query.quantity);
-  let cartCopy = cart.slice();
 
-  let result = addItemsToCart(cartCopy, productId, name, price, quantity);
+  let result = addItemsToCart(cart, productId, name, price, quantity);
 
   res.json({ cartItems: result });
 });
 
-function updateQuantity(cartCopy, productId, quantity) {
-  for (let i = 0; i < cartCopy.length; i++) {
-    if (cartCopy[i].productId === productId) {
-      cartCopy[i].quantity = quantity;
+function updateQuantity(cart, productId, quantity) {
+  for (let i = 0; i < cart.length; i++) {
+    if (cart[i].productId === productId) {
+      cart[i].quantity = quantity;
     }
   }
 
-  return cartCopy;
+  return cart;
 }
 
 // endpoint 2
 app.get('/cart/edit', (req, res) => {
   let productId = parseInt(req.query.productId);
   let quantity = parseInt(req.query.quantity);
-  let cartData = cart.slice();
-  let result = updateQuantity(cartData, productId, quantity);
+
+  let result = updateQuantity(cart, productId, quantity);
   res.json({ cartItems: result });
 });
 
