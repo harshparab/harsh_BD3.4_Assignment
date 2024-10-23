@@ -12,15 +12,15 @@ let cart = [
   { productId: 2, name: 'Mobile', price: 20000, quantity: 2 },
 ];
 
-function addItemsToCart(products, productId, name, price, quantity) {
-  cart.push({
+function addItemsToCart(cartCopy, productId, name, price, quantity) {
+  cartCopy.push({
     productId: productId,
     name: name,
     price: price,
     quantity: quantity,
   });
 
-  return cart;
+  return cartCopy;
 }
 
 // endpoint 1
@@ -29,28 +29,29 @@ app.get('/cart/add', (req, res) => {
   let name = req.query.name;
   let price = parseFloat(req.query.price);
   let quantity = parseInt(req.query.quantity);
+  let cartCopy = cart.slice();
 
-  let result = addItemsToCart(cart, productId, name, price, quantity);
+  let result = addItemsToCart(cartCopy, productId, name, price, quantity);
 
   res.json({ cartItems: result });
 });
 
-function updateQuantity(cart, productId, quantity) {
-  for (let i = 0; i < cart.length; i++) {
-    if (cart[i].productId === productId) {
-      cart[i].quantity = quantity;
+function updateQuantity(cartCopy, productId, quantity) {
+  for (let i = 0; i < cartCopy.length; i++) {
+    if (cartCopy[i].productId === productId) {
+      cartCopy[i].quantity = quantity;
     }
   }
 
-  return cart;
+  return cartCopy;
 }
 
 // endpoint 2
 app.get('/cart/edit', (req, res) => {
   let productId = parseInt(req.query.productId);
   let quantity = parseInt(req.query.quantity);
-  let result = updateQuantity(cart, productId, quantity);
-
+  let cartData = cart.slice();
+  let result = updateQuantity(cartData, productId, quantity);
   res.json({ cartItems: result });
 });
 
@@ -61,6 +62,7 @@ function removeProductFromCart(product, productId) {
 // endpoint 3
 app.get('/cart/delete', (req, res) => {
   let productId = parseInt(req.query.productId);
+
   let result = cart.filter((product) =>
     removeProductFromCart(product, productId)
   );
@@ -75,7 +77,6 @@ app.get('/cart', (req, res) => {
 
 function fetchTotalCartQuantity(cart) {
   let totalQuantity = 0;
-
   for (let i = 0; i < cart.length; i++) {
     totalQuantity += cart[i].quantity;
   }
