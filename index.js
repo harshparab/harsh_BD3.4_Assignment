@@ -85,6 +85,7 @@ function fetchTotalCartQuantity(cart) {
 
 // endpoint 5
 app.get('/cart/total-quantity', (req, res) => {
+  console.log('Cart Items in total quantity API ::::', cart);
   let result = fetchTotalCartQuantity(cart);
 
   res.json(result);
@@ -102,6 +103,7 @@ function fetchTotalPrice(cart) {
 
 // endpoint 6
 app.get('/cart/total-price', (req, res) => {
+  console.log('Cart Items in total price API ::::', cart);
   let result = fetchTotalPrice(cart);
 
   res.json(result);
